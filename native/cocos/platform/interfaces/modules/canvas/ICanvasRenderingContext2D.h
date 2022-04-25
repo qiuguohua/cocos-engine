@@ -44,13 +44,13 @@ public:
 
 class CC_DLL ICanvasRenderingContext2D : public OSInterface {
 public:
-    enum class CanvasTextAlign {
+    enum class TextAlign {
         LEFT,
         CENTER,
         RIGHT
     };
 
-    enum class CanvasTextBaseline {
+    enum class TextBaseline {
         TOP,
         MIDDLE,
         BOTTOM,
@@ -59,34 +59,34 @@ public:
 
     class Delegate {
     public:
-        using Size                                                                                                                            = std::array<float, 2>;
-        virtual ~Delegate()                                                                                                                   = default;
-        virtual void            recreateBuffer(float w, float h)                                                                              = 0;
-        virtual void            beginPath()                                                                                                   = 0;
-        virtual void            closePath()                                                                                                   = 0;
-        virtual void            moveTo(float x, float y)                                                                                      = 0;
-        virtual void            lineTo(float x, float y)                                                                                      = 0;
-        virtual void            stroke()                                                                                                      = 0;
-        virtual void            saveContext()                                                                                                 = 0;
-        virtual void            restoreContext()                                                                                              = 0;
-        virtual void            clearRect(float /*x*/, float /*y*/, float w, float h)                                                         = 0;
-        virtual void            fill()                                                                                                        = 0;
-        virtual void            rect(float x, float y, float w, float h)                                                                      = 0;
-        virtual void            setLineCap(const std::string &lineCap)                                                                        = 0;
-        virtual void            setLineJoin(const std::string &lineCap)                                                                       = 0;
-        virtual void            fillImageData(const Data &imageData, float imageWidth, float imageHeight, float offsetX, float offsetY)       = 0;
-        virtual void            fillRect(float x, float y, float w, float h)                                                                  = 0;
-        virtual void            fillText(const std::string &text, float x, float y, float /*maxWidth*/)                                       = 0;
-        virtual void            strokeText(const std::string &text, float /*x*/, float /*y*/, float /*maxWidth*/)                             = 0;
-        virtual Size            measureText(const std::string &text)                                                                          = 0;
-        virtual void            updateFont(const std::string &fontName, float fontSize, bool bold, bool italic, bool oblique, bool smallCaps) = 0;
-        virtual void            setTextAlign(CanvasTextAlign align)                                                                           = 0;
-        virtual void            setTextBaseline(CanvasTextBaseline baseline)                                                                  = 0;
-        virtual void            setFillStyle(float r, float g, float b, float a)                                                              = 0;
-        virtual void            setStrokeStyle(float r, float g, float b, float a)                                                            = 0;
-        virtual void            setLineWidth(float lineWidth)                                                                                 = 0;
-        virtual const cc::Data &getDataRef() const                                                                                            = 0;
-        virtual void            updateData()                                                                                                  = 0;
+        using Size                                                                                                                              = ccstd::array<float, 2>;
+        virtual ~Delegate()                                                                                                                     = default;
+        virtual void            recreateBuffer(float w, float h)                                                                                = 0;
+        virtual void            beginPath()                                                                                                     = 0;
+        virtual void            closePath()                                                                                                     = 0;
+        virtual void            moveTo(float x, float y)                                                                                        = 0;
+        virtual void            lineTo(float x, float y)                                                                                        = 0;
+        virtual void            stroke()                                                                                                        = 0;
+        virtual void            saveContext()                                                                                                   = 0;
+        virtual void            restoreContext()                                                                                                = 0;
+        virtual void            clearRect(float /*x*/, float /*y*/, float w, float h)                                                           = 0;
+        virtual void            fill()                                                                                                          = 0;
+        virtual void            rect(float x, float y, float w, float h)                                                                        = 0;
+        virtual void            setLineCap(const ccstd::string &lineCap)                                                                        = 0;
+        virtual void            setLineJoin(const ccstd::string &lineCap)                                                                       = 0;
+        virtual void            fillImageData(const Data &imageData, float imageWidth, float imageHeight, float offsetX, float offsetY)         = 0;
+        virtual void            fillRect(float x, float y, float w, float h)                                                                    = 0;
+        virtual void            fillText(const ccstd::string &text, float x, float y, float /*maxWidth*/)                                       = 0;
+        virtual void            strokeText(const ccstd::string &text, float /*x*/, float /*y*/, float /*maxWidth*/)                             = 0;
+        virtual Size            measureText(const ccstd::string &text)                                                                          = 0;
+        virtual void            updateFont(const ccstd::string &fontName, float fontSize, bool bold, bool italic, bool oblique, bool smallCaps) = 0;
+        virtual void            setTextAlign(TextAlign align)                                                                             = 0;
+        virtual void            setTextBaseline(TextBaseline baseline)                                                                    = 0;
+        virtual void            setFillStyle(float r, float g, float b, float a)                                                                = 0;
+        virtual void            setStrokeStyle(float r, float g, float b, float a)                                                              = 0;
+        virtual void            setLineWidth(float lineWidth)                                                                                   = 0;
+        virtual const cc::Data &getDataRef() const                                                                                              = 0;
+        virtual void            updateData()                                                                                                    = 0;
     };
     //static OSInterface::Ptr getInterface();
     // Rect
