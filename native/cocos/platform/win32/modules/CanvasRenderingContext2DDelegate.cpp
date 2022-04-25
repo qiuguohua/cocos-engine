@@ -263,7 +263,7 @@ void CanvasRenderingContext2DDelegate::setTextAlign(TextAlign align) {
     _textAlign = align;
 }
 
-void CanvasRenderingContext2DDelegate::setTextBaseline(TextBaselineine) {
+void CanvasRenderingContext2DDelegate::setTextBaseline(TextBaseline baseline) {
     _textBaseLine = baseline;
 }
 
@@ -457,7 +457,7 @@ std::array<float, 2> CanvasRenderingContext2DDelegate::convertDrawPoint(Point po
         point[0] -= textSize[0];
     }
 
-    if (_textBaseLine == TextBaseline {
+    if (_textBaseLine == TextBaseline::TOP) {
         // DrawText default
         GetTextMetrics(_DC, &_tm);
         point[1] += -_tm.tmInternalLeading;
