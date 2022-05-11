@@ -1,9 +1,5 @@
 /****************************************************************************
- Copyright (c) 2008-2010 Ricardo Quesada
- Copyright (c) 2010-2012 cocos2d-x.org
- Copyright (c) 2011 Zynga Inc.
- Copyright (c) 2013-2016 Chukong Technologies Inc.
- Copyright (c) 2017-2022 Xiamen Yaji Software Co., Ltd.
+ Copyright (c) 2022 Xiamen Yaji Software Co., Ltd.
 
  http://www.cocos.com
 
@@ -29,44 +25,39 @@
 
 #pragma once
 
-/** Support PNG or not. If your application don't use png format picture, you can undefine this macro to save package size.
-*/
-#ifndef CC_USE_PNG
-    #define CC_USE_PNG 1
-#endif // CC_USE_PNG
+#include "../config.h"
 
-/** Support JPEG or not. If your application don't use jpeg format picture, you can undefine this macro to save package size.
- */
-#ifndef CC_USE_JPEG
-    #define CC_USE_JPEG 1
-#endif // CC_USE_JPEG
+#if SCRIPT_ENGINE_TYPE == SCRIPT_ENGINE_QUICKJS
 
-/** Support webp or not. If your application don't use webp format picture, you can undefine this macro to save package size.
- */
-#if CC_PLATFORM != CC_PLATFORM_NX
-#ifndef CC_USE_WEBP
-    #define CC_USE_WEBP 1
-#endif // CC_USE_WEBP
-#endif
+    #include "Base.h"
 
-/** Support EditBox
- */
-#ifndef CC_USE_EDITBOX
-    #define CC_USE_EDITBOX 1
-#endif
+    #include "../Value.h"
 
-#ifndef CC_FILEUTILS_APPLE_ENABLE_OBJC
-    #define CC_FILEUTILS_APPLE_ENABLE_OBJC 1
-#endif
+namespace se {
 
-#ifndef CC_ENABLE_CACHE_JSB_FUNC_RESULT
-    #define CC_ENABLE_CACHE_JSB_FUNC_RESULT 1
-#endif
+class Class;
 
-#ifndef USE_MEMORY_LEAK_DETECTOR
-    #define USE_MEMORY_LEAK_DETECTOR 0
-#endif
+namespace internal {
 
-#ifndef CC_USE_PROFILER
-    #define CC_USE_PROFILER 0
-#endif
+void forceConvertJsValueToStdString(JSContext *cx, JSValue jsval, std::string *ret);
+
+void jsToSeArgs(JSContext *cx, int argc, JSValueConst *argv, ValueArray &outArr);
+void jsToSeValue(JSContext *cx, JSValueConst jsval, Value *v);
+void seToJsArgs(JSContext *cx, int argc, const Value *args, JSValue *outArr);
+void seToJsValue(JSContext *cx, const Value &v, JSValue *outVal);
+void setReturnJSValue(JSContext *cx, const Value &arg, JSValue *outVal);
+
+bool  hasPrivate(JSValue obj);
+void *getPrivate(JSValue obj);
+void  setPrivate(JSValue obj, Object *seObj);
+void  clearPrivate(JSValue obj);
+
+bool isJSBClass(JSValue obj);
+
+void jsObjectToSeObject(JSValueConst jsval, Value *v);
+
+} // namespace internal
+
+} // namespace se
+
+#endif // #if SCRIPT_ENGINE_TYPE == SCRIPT_ENGINE_QUICKJS

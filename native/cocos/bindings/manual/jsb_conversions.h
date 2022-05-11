@@ -40,6 +40,7 @@
 #include "base/Variant.h"
 #include "base/std/container/vector.h"
 #include "jsb_conversions_spec.h"
+#include "cocos/base/TypeDef.h"
 
 #if CC_USE_SPINE
     #include "cocos/editor-support/spine-creator-support/spine-cocos2dx.h"

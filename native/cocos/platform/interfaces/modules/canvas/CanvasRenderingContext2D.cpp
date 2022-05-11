@@ -43,6 +43,8 @@
     #include "platform/linux/modules/CanvasRenderingContext2DDelegate.h"
 #elif (CC_PLATFORM == CC_PLATFORM_QNX)
     #include "platform/qnx/modules/CanvasRenderingContext2DDelegate.h"
+#elif (CC_PLATFORM == CC_PLATFORM_NX_WINDOWS || CC_PLATFORM == CC_PLATFORM_NX)
+    #include "platform/nx/modules/CanvasRenderingContext2DDelegate.h"
 #endif
 
 using Vec2 = ccstd::array<float, 2>;
@@ -214,8 +216,8 @@ void CanvasRenderingContext2D::rect(float x, float y, float w, float h) {
 }
 
 void CanvasRenderingContext2D::setFont(const ccstd::string &font) {
+#if CC_PLATFORM == CC_PLATFORM_WINDOWS || CC_PLATFORM == CC_PLATFORM_NX_WINDOWS || CC_PLATFORM == CC_PLATFORM_NX
     recreateBufferIfNeeded();
-#if CC_PLATFORM == CC_PLATFORM_WINDOWS
     if (_font != font) {
         _font = font;
 

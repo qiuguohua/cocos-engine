@@ -40,6 +40,8 @@
     #include "platform/linux/LinuxPlatform.h"
 #elif (CC_PLATFORM == CC_PLATFORM_QNX)
     #include "platform/qnx/QnxPlatform.h"
+#elif (CC_PLATFORM == CC_PLATFORM_NX_WINDOWS || CC_PLATFORM == CC_PLATFORM_NX)
+    #include "platform/nx/NXPlatform.h"
 #endif
 
 namespace cc {
@@ -58,6 +60,8 @@ BasePlatform::~BasePlatform() {
 BasePlatform* BasePlatform::createDefaultPlatform() {
 #if defined(CC_SERVER_MODE)
     static EmptyPlatform platform;
+#elif (CC_PLATFORM == CC_PLATFORM_NX_WINDOWS || CC_PLATFORM == CC_PLATFORM_NX)
+    static NXPlatform platform;
 #elif (CC_PLATFORM == CC_PLATFORM_WINDOWS)
     static WindowsPlatform platform;
 #elif (CC_PLATFORM == CC_PLATFORM_ANDROID)

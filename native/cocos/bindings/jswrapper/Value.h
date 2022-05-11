@@ -468,6 +468,13 @@ public:
         return static_cast<uintptr_t>(toUint64());
     }
 
+#if SCRIPT_ENGINE_TYPE == SCRIPT_ENGINE_QUICKJS
+    inline void     advanceFreeValueCount() { ++_needFreeValueCount; }
+    inline uint32_t getFreeValueCount() const { return _needFreeValueCount; }
+    inline void     clearFreeValueCount() { _needFreeValueCount = 0; }
+    void            executeFreeValueOperation();
+#endif
+
 private:
     explicit Value(Type type);
     void reset(Type type);
@@ -482,6 +489,10 @@ private:
 
     Type _type;
     bool _autoRootUnroot;
+
+#if SCRIPT_ENGINE_TYPE == SCRIPT_ENGINE_QUICKJS
+    uint32_t _needFreeValueCount{0};
+#endif
 };
 
 using ValueArray = ccstd::vector<Value>;

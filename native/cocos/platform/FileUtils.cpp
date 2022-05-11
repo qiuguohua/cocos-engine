@@ -913,7 +913,7 @@ void FileUtils::listFilesRecursively(const ccstd::string &dirPath, ccstd::vector
     }
 }
 
-#if (CC_PLATFORM == CC_PLATFORM_WINDOWS) || (CC_PLATFORM == CC_PLATFORM_WINRT)
+#if (CC_PLATFORM == CC_PLATFORM_WINDOWS) || (CC_PLATFORM == CC_PLATFORM_WINRT) || (CC_PLATFORM == CC_PLATFORM_NX_WINDOWS) || (CC_PLATFORM == CC_PLATFORM_NX)
 // windows os implement should override in platform specific FileUtiles class
 bool FileUtils::isDirectoryExistInternal(const ccstd::string &dirPath) const {
     // FileUtils not support isDirectoryExistInternal.

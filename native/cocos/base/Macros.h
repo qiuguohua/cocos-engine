@@ -33,8 +33,7 @@
 
 #include <cassert>
 #define CC_ASSERT(cond) assert(cond)
-
-#if (CC_PLATFORM == CC_PLATFORM_WINDOWS)
+#if (CC_PLATFORM == CC_PLATFORM_WINDOWS || CC_PLATFORM == CC_PLATFORM_NX_WINDOWS)
     #if defined(CC_STATIC)
         #define CC_DLL
     #else

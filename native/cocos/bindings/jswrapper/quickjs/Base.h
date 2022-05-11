@@ -1,9 +1,5 @@
 /****************************************************************************
- Copyright (c) 2008-2010 Ricardo Quesada
- Copyright (c) 2010-2012 cocos2d-x.org
- Copyright (c) 2011 Zynga Inc.
- Copyright (c) 2013-2016 Chukong Technologies Inc.
- Copyright (c) 2017-2022 Xiamen Yaji Software Co., Ltd.
+ Copyright (c) 2022 Xiamen Yaji Software Co., Ltd.
 
  http://www.cocos.com
 
@@ -29,44 +25,18 @@
 
 #pragma once
 
-/** Support PNG or not. If your application don't use png format picture, you can undefine this macro to save package size.
-*/
-#ifndef CC_USE_PNG
-    #define CC_USE_PNG 1
-#endif // CC_USE_PNG
+#include "quickjs-libc.h"
+#include "quickjs.h"
 
-/** Support JPEG or not. If your application don't use jpeg format picture, you can undefine this macro to save package size.
- */
-#ifndef CC_USE_JPEG
-    #define CC_USE_JPEG 1
-#endif // CC_USE_JPEG
+using JSPropGetter = JSValue (*)(JSContext *ctx, JSValueConst this_val);
+using JSPropSetter = JSValue (*)(JSContext *ctx, JSValueConst this_val, JSValueConst val);
 
-/** Support webp or not. If your application don't use webp format picture, you can undefine this macro to save package size.
- */
-#if CC_PLATFORM != CC_PLATFORM_NX
-#ifndef CC_USE_WEBP
-    #define CC_USE_WEBP 1
-#endif // CC_USE_WEBP
-#endif
+#include "HelperMacros.h"
 
-/** Support EditBox
- */
-#ifndef CC_USE_EDITBOX
-    #define CC_USE_EDITBOX 1
-#endif
-
-#ifndef CC_FILEUTILS_APPLE_ENABLE_OBJC
-    #define CC_FILEUTILS_APPLE_ENABLE_OBJC 1
-#endif
-
-#ifndef CC_ENABLE_CACHE_JSB_FUNC_RESULT
-    #define CC_ENABLE_CACHE_JSB_FUNC_RESULT 1
-#endif
-
-#ifndef USE_MEMORY_LEAK_DETECTOR
-    #define USE_MEMORY_LEAK_DETECTOR 0
-#endif
-
-#ifndef CC_USE_PROFILER
-    #define CC_USE_PROFILER 0
-#endif
+#include <assert.h>
+#include <chrono>
+#include <functional>
+#include <initializer_list>
+#include <string>
+#include <unordered_map>
+#include <vector>

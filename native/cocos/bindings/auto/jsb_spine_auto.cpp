@@ -15131,6 +15131,20 @@ static bool js_spine_SkeletonAnimation_constructor(se::State& s) // NOLINT(reada
 }
 SE_BIND_CTOR(js_spine_SkeletonAnimation_constructor, __jsb_spine_SkeletonAnimation_class, js_spine_SkeletonAnimation_finalize)
 
+#if SCRIPT_ENGINE_TYPE != SCRIPT_ENGINE_QUICKJS
+static bool js_spine_SkeletonAnimation_ctor(se::State& s) // NOLINT(readability-identifier-naming)
+{
+    spine::SkeletonAnimation* cobj = JSB_ALLOC(spine::SkeletonAnimation);
+    s.thisObject()->setPrivateData(cobj);
+    return true;
+}
+
+SE_BIND_SUB_CLS_CTOR(js_spine_SkeletonAnimation_ctor, __jsb_spine_SkeletonAnimation_class, js_spine_SkeletonAnimation_finalize)
+#endif
+
+
+    
+
 static bool js_spine_SkeletonAnimation_finalize(se::State& s) // NOLINT(readability-identifier-naming)
 {
     return true;
@@ -15168,10 +15182,13 @@ bool js_register_spine_SkeletonAnimation(se::Object* obj) // NOLINT(readability-
     cls->defineFunction("setTrackEventListener", _SE(js_spine_SkeletonAnimation_setTrackEventListener));
     cls->defineFunction("setTrackInterruptListener", _SE(js_spine_SkeletonAnimation_setTrackInterruptListener));
     cls->defineFunction("setTrackStartListener", _SE(js_spine_SkeletonAnimation_setTrackStartListener));
-    cls->defineStaticFunction("create", _SE(js_spine_SkeletonAnimation_create_static));
-    cls->defineStaticFunction("createWithBinaryFile", _SE(js_spine_SkeletonAnimation_createWithBinaryFile_static));
-    cls->defineStaticFunction("createWithJsonFile", _SE(js_spine_SkeletonAnimation_createWithJsonFile_static));
-    cls->defineStaticFunction("setGlobalTimeScale", _SE(js_spine_SkeletonAnimation_setGlobalTimeScale_static));
+#if SCRIPT_ENGINE_TYPE != SCRIPT_ENGINE_QUICKJS
+    cls->defineFunction("ctor", _SE(js_spine_SkeletonAnimation_ctor));
+#endif
+    cls->defineStaticFunction("create", _SE(js_spine_SkeletonAnimation_create));
+    cls->defineStaticFunction("createWithJsonFile", _SE(js_spine_SkeletonAnimation_createWithJsonFile));
+    cls->defineStaticFunction("createWithBinaryFile", _SE(js_spine_SkeletonAnimation_createWithBinaryFile));
+    cls->defineStaticFunction("setGlobalTimeScale", _SE(js_spine_SkeletonAnimation_setGlobalTimeScale));
     cls->defineFinalizeFunction(_SE(js_spine_SkeletonAnimation_finalize));
     cls->install();
     JSBClassType::registerClass<spine::SkeletonAnimation>(cls);
