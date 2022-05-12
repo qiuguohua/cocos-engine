@@ -859,15 +859,13 @@ endif()
 
 if(NX_WINDOWS)
     cocos_source_files(
-                     cocos/platform/win32/compat
-                     cocos/platform/win32/compat/stdint.h
+        cocos/platform/win32/compat
+        cocos/platform/win32/compat/stdint.h
     )
 elseif(WINDOWS)
     cocos_source_files(
-                     cocos/platform/win32/compat
-                     cocos/platform/win32/compat/stdint.h
-                     cocos/platform/win32/inet_pton_mingw.cpp
-                     cocos/platform/win32/inet_pton_mingw.h
+        cocos/platform/win32/compat
+        cocos/platform/win32/compat/stdint.h
     )
     cocos_source_files(MODULE ccfilesystem
         cocos/platform/win32/FileUtils-win32.cpp
@@ -2796,12 +2794,11 @@ if(QNX)
     list(APPEND COCOS_SOURCE_LIST ${ccqnx_SOURCE_LIST})
 endif()
 
-add_library(cocos2d ${COCOS2D_SOURCE_LIST})
 if(NX_WINDOWS OR NX)
     include(${NX_PATH}/source.cmake)
     nx_source_list(ccnx_SOURCE_LIST ${NX_PATH})
     source_group(TREE ${NX_PATH} PREFIX "Source Files" FILES ${ccnx_SOURCE_LIST}})
-    list(APPEND COCOS2D_SOURCE_LIST ${ccnx_SOURCE_LIST})
+    list(APPEND COCOS_SOURCE_LIST ${ccnx_SOURCE_LIST})
 endif()
 add_library(${ENGINE_NAME} ${COCOS_SOURCE_LIST})
 

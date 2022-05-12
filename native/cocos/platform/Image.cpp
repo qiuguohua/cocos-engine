@@ -40,6 +40,8 @@
 #include "base/Utils.h"
 #include "gfx-base/GFXDef.h"
 
+#define XMD_H
+
 extern "C" {
 #if CC_USE_PNG
     #if __OHOS__ || __LINUX__ || __QNX__
