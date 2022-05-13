@@ -887,8 +887,8 @@ bool Image::initWithPVRData(const unsigned char *data, uint32_t dataLen) {
 }
 
 bool Image::initWithWebpData(const unsigned char *data, uint32_t dataLen) {
-#if CC_USE_WEBP
     bool ret = false;
+#if CC_USE_WEBP
 
     do {
         WebPDecoderConfig config;
@@ -918,8 +918,8 @@ bool Image::initWithWebpData(const unsigned char *data, uint32_t dataLen) {
 
         ret = true;
     } while (false);
-    return ret;
 #endif // CC_USE_WEBP
+    return ret;
 }
 
 bool Image::initWithRawData(const unsigned char *data, uint32_t /*dataLen*/, int width, int height, int /*bitsPerComponent*/, bool /*preMulti*/) {

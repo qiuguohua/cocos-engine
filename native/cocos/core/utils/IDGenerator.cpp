@@ -1,8 +1,10 @@
 #include "core/utils/IDGenerator.h"
 #include "base/Random.h"
-#include "boost/uuid/uuid.hpp"
-#include "boost/uuid/uuid_generators.hpp"
-#include "boost/uuid/uuid_io.hpp"
+#if (CC_PLATFORM != CC_PLATFORM_NX)
+    #include "boost/uuid/uuid.hpp"
+    #include "boost/uuid/uuid_generators.hpp"
+    #include "boost/uuid/uuid_io.hpp"
+#endif
 
 namespace cc {
 
