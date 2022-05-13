@@ -34,14 +34,12 @@ if(NX)
     cc_set_if_undefined(CC_USE_VULKAN ON)
     cc_set_if_undefined(CC_USE_GLES3 OFF)
     cc_set_if_undefined(CC_USE_GLES2 OFF)
-    set(USE_VIDEO OFF)
-    set(USE_V8_DEBUGGER OFF)
-    set(USE_EDIT_BOX OFF)
 
+    set(USE_V8_DEBUGGER OFF)
     set(USE_VIDEO OFF)
     set(USE_WEBVIEW OFF)
-    set(USE_MIDDLEWARE OFF)
-    set(USE_SE_QUICKJS ON)
+    set(USE_SE_QUICKJS OFF)
+
 elseif(ANDROID OR WINDOWS OR OHOS)
     cc_set_if_undefined(CC_USE_GLES3 ON)
     cc_set_if_undefined(CC_USE_VULKAN OFF)
@@ -2002,21 +2000,21 @@ endif()
 
 if(USE_MIDDLEWARE)
     cocos_source_files(
-                     cocos/editor-support/IOBuffer.cpp
-                     cocos/editor-support/IOBuffer.h
-                     cocos/editor-support/IOTypedArray.cpp
-                     cocos/editor-support/IOTypedArray.h
-                     cocos/editor-support/MeshBuffer.cpp
-                     cocos/editor-support/MeshBuffer.h
-                     cocos/editor-support/middleware-adapter.cpp
-                     cocos/editor-support/middleware-adapter.h
-                     cocos/editor-support/MiddlewareMacro.h
-                     cocos/editor-support/MiddlewareManager.cpp
-                     cocos/editor-support/MiddlewareManager.h
-                     cocos/editor-support/SharedBufferManager.cpp
-                     cocos/editor-support/SharedBufferManager.h
-                     cocos/editor-support/TypedArrayPool.cpp
-                     cocos/editor-support/TypedArrayPool.h
+        cocos/editor-support/IOBuffer.cpp
+        cocos/editor-support/IOBuffer.h
+        cocos/editor-support/IOTypedArray.cpp
+        cocos/editor-support/IOTypedArray.h
+        cocos/editor-support/MeshBuffer.cpp
+        cocos/editor-support/MeshBuffer.h
+        cocos/editor-support/middleware-adapter.cpp
+        cocos/editor-support/middleware-adapter.h
+        cocos/editor-support/MiddlewareMacro.h
+        cocos/editor-support/MiddlewareManager.cpp
+        cocos/editor-support/MiddlewareManager.h
+        cocos/editor-support/SharedBufferManager.cpp
+        cocos/editor-support/SharedBufferManager.h
+        cocos/editor-support/TypedArrayPool.cpp
+        cocos/editor-support/TypedArrayPool.h
     )
 
     cocos_source_files(
@@ -2459,51 +2457,51 @@ if(USE_SE_QUICKJS)
 endif()
 
 cocos_source_files(MODULE ccbindings
-                 cocos/bindings/jswrapper/config.cpp
-                 cocos/bindings/jswrapper/config.h
-                 cocos/bindings/jswrapper/HandleObject.cpp
-                 cocos/bindings/jswrapper/HandleObject.h
-                 cocos/bindings/jswrapper/MappingUtils.cpp
-                 cocos/bindings/jswrapper/MappingUtils.h
-                 cocos/bindings/jswrapper/Object.h
-                 cocos/bindings/jswrapper/RefCounter.cpp
-                 cocos/bindings/jswrapper/RefCounter.h
-                 cocos/bindings/jswrapper/SeApi.h
-                 cocos/bindings/jswrapper/State.cpp
-                 cocos/bindings/jswrapper/State.h
-                 cocos/bindings/jswrapper/PrivateObject.h
-                 cocos/bindings/jswrapper/Value.cpp
-                 cocos/bindings/jswrapper/Value.h
-                 cocos/bindings/jswrapper/ValueArrayPool.cpp
-                 cocos/bindings/jswrapper/ValueArrayPool.h
+    cocos/bindings/jswrapper/config.cpp
+    cocos/bindings/jswrapper/config.h
+    cocos/bindings/jswrapper/HandleObject.cpp
+    cocos/bindings/jswrapper/HandleObject.h
+    cocos/bindings/jswrapper/MappingUtils.cpp
+    cocos/bindings/jswrapper/MappingUtils.h
+    cocos/bindings/jswrapper/Object.h
+    cocos/bindings/jswrapper/RefCounter.cpp
+    cocos/bindings/jswrapper/RefCounter.h
+    cocos/bindings/jswrapper/SeApi.h
+    cocos/bindings/jswrapper/State.cpp
+    cocos/bindings/jswrapper/State.h
+    cocos/bindings/jswrapper/PrivateObject.h
+    cocos/bindings/jswrapper/Value.cpp
+    cocos/bindings/jswrapper/Value.h
+    cocos/bindings/jswrapper/ValueArrayPool.cpp
+    cocos/bindings/jswrapper/ValueArrayPool.h
 )
 
 cocos_source_files(
-                 cocos/bindings/manual/jsb_global_init.cpp
-                 cocos/bindings/manual/jsb_global_init.h
+    cocos/bindings/manual/jsb_global_init.cpp
+    cocos/bindings/manual/jsb_global_init.h
 )
 
 cocos_source_files(
-                 cocos/bindings/event/CustomEventTypes.h
-                 cocos/bindings/event/EventDispatcher.cpp
-                 cocos/bindings/event/EventDispatcher.h
+    cocos/bindings/event/CustomEventTypes.h
+    cocos/bindings/event/EventDispatcher.cpp
+    cocos/bindings/event/EventDispatcher.h
 )
 
 #### storage
 if(NOT NX)
-cocos_source_files(
-                 cocos/storage/local-storage/LocalStorage.cpp
-                 cocos/storage/local-storage/LocalStorage.h
-)
+    cocos_source_files(
+        cocos/storage/local-storage/LocalStorage.cpp
+        cocos/storage/local-storage/LocalStorage.h
+    )
 endif()
 if(NOT ANDROID)
     cocos_source_files(
-                     cocos/storage/local-storage/LocalStorage.cpp
-                     cocos/storage/local-storage/LocalStorage.h
+        cocos/storage/local-storage/LocalStorage.cpp
+        cocos/storage/local-storage/LocalStorage.h
     )
 else()
     cocos_source_files(
-                     cocos/storage/local-storage/LocalStorage-android.cpp
+        cocos/storage/local-storage/LocalStorage-android.cpp
     )
 endif()
 
@@ -2603,17 +2601,17 @@ endif()
 ##### extensions
 
 cocos_source_files(
-                 extensions/assets-manager/AssetsManagerEx.cpp
-                 extensions/assets-manager/AssetsManagerEx.h
-                 extensions/assets-manager/AsyncTaskPool.cpp
-                 extensions/assets-manager/AsyncTaskPool.h
-                 extensions/assets-manager/EventAssetsManagerEx.cpp
-                 extensions/assets-manager/EventAssetsManagerEx.h
-                 extensions/assets-manager/Manifest.cpp
-                 extensions/assets-manager/Manifest.h
-                 extensions/cocos-ext.h
-                 extensions/ExtensionExport.h
-                 extensions/ExtensionMacros.h
+    extensions/assets-manager/AssetsManagerEx.cpp
+    extensions/assets-manager/AssetsManagerEx.h
+    extensions/assets-manager/AsyncTaskPool.cpp
+    extensions/assets-manager/AsyncTaskPool.h
+    extensions/assets-manager/EventAssetsManagerEx.cpp
+    extensions/assets-manager/EventAssetsManagerEx.h
+    extensions/assets-manager/Manifest.cpp
+    extensions/assets-manager/Manifest.h
+    extensions/cocos-ext.h
+    extensions/ExtensionExport.h
+    extensions/ExtensionMacros.h
 )
 
 list(APPEND COCOS_SOURCE_LIST ${CC_EXTERNAL_SOURCES})
