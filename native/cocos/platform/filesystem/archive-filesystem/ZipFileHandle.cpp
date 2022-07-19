@@ -31,7 +31,7 @@
 namespace cc {
 
 ZipFileHandle::ZipFileHandle(ZipFile* zipFile, const ccstd::string& filePath)
-: _zipfile(zipFile), _filePath(filePath) {
+: _zipfile(zipFile), _filePath(std::move(filePath)) {
 }
 
 ZipFileHandle::~ZipFileHandle() = default;

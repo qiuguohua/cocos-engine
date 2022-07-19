@@ -541,7 +541,9 @@ public:
 
     virtual ccstd::string normalizePath(const ccstd::string &path) const;
     virtual ccstd::string getFileDir(const ccstd::string &path) const;
-
+#if CC_PLATFORM == CC_PLATFORM_ANDROID
+    int getFileFd(const ccstd::string &url, off_t *start, off_t *length);
+#endif
 protected:
     /**
      *  Initializes the instance of FileUtils. It will set _searchPathArray and _searchResolutionsOrderArray to default values.

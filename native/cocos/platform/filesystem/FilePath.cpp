@@ -56,12 +56,12 @@ ccstd::string::size_type getLastSepPos(const ccstd::string& path) {
 
 constexpr char kSeparators[] =
 #if (CC_PLATFORM == CC_PLATFORM_WINDOWS)
-    "\\/";
+    "\\/";  // NOLINT(readability-identifier-naming)
 #else
-    "/";
+    "/";    // NOLINT(readability-identifier-naming)
 #endif
 
-constexpr size_t kSeparatorsLength = std::size(kSeparators);
+constexpr size_t kSeparatorsLength = std::size(kSeparators); // NOLINT(readability-identifier-naming)
 
 bool isSeparator(char character) {
     for (size_t i = 0; i < kSeparatorsLength - 1; ++i) {
@@ -81,7 +81,7 @@ FilePath::FilePath() : FilePath("") {
 
 FilePath::FilePath(const FilePath& that) = default;
 // FilePath::FilePath(FilePath&& that) noexcept = default;
-FilePath::FilePath(const ccstd::string& path) : _path(path) {
+FilePath::FilePath(const ccstd::string& path) : _path(std::move(path)) {
     _path = normalizePath();
 }
 FilePath::~FilePath() = default;
@@ -178,17 +178,17 @@ FilePath FilePath::append(const ccstd::string& path) const {
         return FilePath(appended);
     }
 
-    FilePath new_path(_path);
-    new_path.removeLastSeparator();
+    FilePath newPath(_path);
+    newPath.removeLastSeparator();
 
-    if (!appended.empty() && !new_path._path.empty()) {
-        if (!isSeparator(new_path._path.back())) {
-            new_path._path.append(1, '/');
+    if (!appended.empty() && !newPath._path.empty()) {
+        if (!isSeparator(newPath._path.back())) {
+            newPath._path.append(1, '/');
         }
     }
 
-    new_path._path.append(appended.data(), appended.size());
-    return new_path;
+    newPath._path.append(appended.data(), appended.size());
+    return newPath;
 }
 
 ccstd::string FilePath::normalizePath() {

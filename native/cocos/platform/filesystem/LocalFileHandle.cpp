@@ -77,11 +77,11 @@ int64_t LocalFileHandle::size() {
 
 bool LocalFileHandle::read(uint8_t* buffer, int64_t bufferSize) {
     CC_ASSERT(_fp != nullptr);
-    int sz = size();
+    int64_t sz = size();
     if (sz > bufferSize) {
         sz = bufferSize;
     }
-    size_t readsize = fread(buffer, 1, sz, _fp);
+    size_t readsize = fread(buffer, 1, static_cast<size_t>(sz), _fp);
     fclose(_fp);
     bool ret = true;
     if (readsize < sz) {

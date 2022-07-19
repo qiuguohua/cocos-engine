@@ -242,18 +242,18 @@ bool ResourceFileSystem::pathExists(const FilePath& path) const {
 }
 
 std::unique_ptr<IFileHandle> ResourceFileSystem::open(const FilePath& filePath, AccessFlag flag) {
-    ccstd::string assert = "";
+    ccstd::string accessFlag = "";
     if (flag == AccessFlag::READ_ONLY) {
-        assert = "rb";
+        accessFlag = "rb";
     } else if (flag == AccessFlag::WRITE_ONLY) {
-        assert = "wb";
+        accessFlag = "wb";
     } else if (flag == AccessFlag::READ_WRITE) {
-        assert = "w+";
+        accessFlag = "w+";
     } else if (flag == AccessFlag::APPEND) {
-        assert = "ab+";
+        accessFlag = "ab+";
     }
     FilePath fullPath = getExistFullPath(filePath);
-    FILE* fp = fopen(fullPath.value().c_str(), assert.c_str());
+    FILE* fp = fopen(fullPath.value().c_str(), accessFlag.c_str());
     if(!fp) {
         return nullptr;
     }

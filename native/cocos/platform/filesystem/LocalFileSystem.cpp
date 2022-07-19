@@ -42,17 +42,17 @@ LocalFileSystem::LocalFileSystem() = default;
 LocalFileSystem::~LocalFileSystem() = default;
 
 std::unique_ptr<IFileHandle> LocalFileSystem::open(const FilePath& filePath, AccessFlag flag) {
-    ccstd::string assert;
+    ccstd::string accessFlag;
     if (flag == AccessFlag::READ_ONLY) {
-        assert = "rb";
+        accessFlag = "rb";
     } else if (flag == AccessFlag::WRITE_ONLY) {
-        assert = "wb";
+        accessFlag = "wb";
     } else if (flag == AccessFlag::READ_WRITE) {
-        assert = "w+";
+        accessFlag = "w+";
     } else if (flag == AccessFlag::APPEND) {
-        assert = "ab+";
+        accessFlag = "ab+";
     }
-    FILE* fp = fopen(filePath.value().c_str(), assert.c_str());
+    FILE* fp = fopen(filePath.value().c_str(), accessFlag.c_str());
     if (!fp) {
         return nullptr;
     }

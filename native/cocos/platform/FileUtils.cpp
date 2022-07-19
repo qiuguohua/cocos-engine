@@ -53,6 +53,12 @@
 #include "cocos/platform/filesystem/IFileHandle.h"
 #include "cocos/platform/filesystem/archive-filesystem/ZipFileSystem.h"
 
+#if CC_PLATFORM == CC_PLATFORM_ANDROID
+#include "cocos/platform/android/ResourceFileSystem.h"
+#endif
+#include "platform/java/jni/JniHelper.h"
+#include "platform/java/jni/JniImp.h"
+
 namespace cc {
 
 // Implement DictMaker
@@ -832,6 +838,30 @@ void FileUtils::listFilesRecursively(const ccstd::string &dirPath, ccstd::vector
     ccstd::string fullpath(fullPathForFilename(dirPath));
     FileSystem::getInstance()->listFilesRecursively(dirPath, files);
 }
+
+#if CC_PLATFORM == CC_PLATFORM_ANDROID
+int FileUtils::getFileFd(const ccstd::string &url, off_t *start, off_t *length) {
+    int fd = -1;
+    ccstd::string assetsPath(getObbFilePathJNI());
+    if (assetsPath.find("/obb/") != ccstd::string::npos) {
+        int64_t startV = 0;
+        int64_t lenV = 0;
+        fd = getObbAssetFileDescriptorJNI(url, &startV, &lenV);
+        if(start) {
+            *start = static_cast<off_t>(startV);
+        }
+        if(length) {
+            *length = static_cast<off_t>(lenV);
+        }
+    } else {
+       auto *asset = AAssetManager_open(cc::ResourceFileSystem::getAssetManager(), url.c_str(), AASSET_MODE_UNKNOWN);
+        // open asset as file descriptor
+        fd = AAsset_openFileDescriptor(asset, start, length);
+        AAsset_close(asset);
+    }
+    return fd;
+}
+#endif
 
 #if (CC_PLATFORM == CC_PLATFORM_WINDOWS) || (CC_PLATFORM == CC_PLATFORM_WINRT)
 // windows os implement should override in platform specific FileUtiles class

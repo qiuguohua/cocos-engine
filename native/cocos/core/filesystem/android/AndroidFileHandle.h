@@ -1,9 +1,9 @@
 
 /****************************************************************************
  Copyright (c) 2022 Xiamen Yaji Software Co., Ltd.
-
+ 
  http://www.cocos.com
-
+ 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated engine source code (the "Software"), a limited,
  worldwide, royalty-free, non-assignable, revocable and non-exclusive license
@@ -11,10 +11,10 @@
  not use Cocos Creator software for developing other software or tools that's
  used for developing games. You are not granted to publish, distribute,
  sublicense, and/or sell copies of Cocos Creator.
-
+ 
  The software or tools in this License Agreement are licensed, not sold.
  Xiamen Yaji Software Co., Ltd. reserves all rights not expressly granted to you.
-
+ 
  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -25,32 +25,30 @@
  ****************************************************************************/
 
 #pragma once
+
 #include "base/Macros.h"
-#include "cocos/platform/filesystem/IFileSystem.h"
+
+#include <Windows.h>
+#include "cocos/platform/filesystem/BaseFileHandle.h"
 
 namespace cc {
 
-class CC_DLL LocalFileSystem : public IFileSystem {
+class CC_DLL AndroidFileHandle : public BaseFileHandle {
 public:
-    LocalFileSystem();
-    ~LocalFileSystem() override;
+    
+    AndroidFileHandle(HANDLE handle);
+    ~AndroidFileHandle() override; 
 
-    static LocalFileSystem* createLocalFileSystem();
-
-    bool createDirectory(const FilePath& path) override;
-    bool removeDirectory(const FilePath& path) override;
-
-    bool removeFile(const FilePath& filePath) override;
-    bool renameFile(const FilePath& oldFilepath, const FilePath& newFilepath) override;
-
-    FilePath getUserAppDataPath() const override;
-    int64_t getFileSize(const FilePath& filePath) const override;
-
-    std::unique_ptr<IFileHandle> open(const FilePath& filePath, AccessFlag flag) override;
-    bool pathExists(const FilePath& path) const override;
-    bool isAbsolutePath(const FilePath& path) const override;
+    bool seek(int64_t pos, MoveMethod moveMethod) override;
+    int64_t tell() override;
+    int64_t fileSize() override;
+    bool read(uint8_t* buffer, int64_t buffersize) override;
+    bool write(uint8_t* buffer, int64_t buffersize) override;
+    bool flush() override;
 
 private:
+    AAsset *_asset{nullptr};
+    
 };
 
-} // namespace cc
+}

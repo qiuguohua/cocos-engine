@@ -55,6 +55,8 @@
 #include "bindings/event/CustomEventTypes.h"
 #include "bindings/event/EventDispatcher.h"
 
+#include "cocos/platform/FileUtils.h"
+
 using namespace cc; //NOLINT
 
 // Audio focus values synchronized with which in cocos/platform/android/java/src/com/cocos/lib/CocosNativeActivity.java
@@ -94,26 +96,7 @@ private:
 static CallerThreadUtils gCallerThreadUtils;
 
 static int fdGetter(const ccstd::string &url, off_t *start, off_t *length) {
-    int fd = -1;
-    if (cc::FileUtilsAndroid::getObbFile() != nullptr) {
-        int64_t startV;
-        int64_t lenV;
-        fd = getObbAssetFileDescriptorJNI(url, &startV, &lenV);
-        *start = static_cast<off_t>(startV);
-        *length = static_cast<off_t>(lenV);
-    }
-    if (fd <= 0) {
-        auto *asset = AAssetManager_open(cc::FileUtilsAndroid::getAssetManager(), url.c_str(), AASSET_MODE_UNKNOWN);
-        // open asset as file descriptor
-        fd = AAsset_openFileDescriptor(asset, start, length);
-        AAsset_close(asset);
-    }
-
-    if (fd <= 0) {
-        ALOGE("Failed to open file descriptor for '%s'", url.c_str());
-    }
-
-    return fd;
+    return FileUtils::getInstance()->getFileFd(url, start, length);
 };
 
 //====================================================
