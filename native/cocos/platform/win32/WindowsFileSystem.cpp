@@ -61,11 +61,13 @@ bool WindowsFileSystem::createDirectory(const FilePath& path) {
         return true;
     }
     FilePath parentPath(path.dirName());
-    if (parentPath.value() == path.value()) {
-        return false;
-    }
-    if (!createDirectory(parentPath)) {
-        return false;
+    if (!parentPath.empty()) {
+        if (parentPath.value() == path.value()) {
+            return false;
+        }
+        if (!createDirectory(parentPath)) {
+            return false;
+        }
     }
 
     std::wstring wPath = StringUtf8ToWideChar(path.value());
@@ -84,7 +86,7 @@ bool WindowsFileSystem::removeDirectory(const FilePath& path) {
         return false;
     }
     std::wstring wpath = StringUtf8ToWideChar(path.value());
-    std::wstring files = wpath + L"*.*";
+    std::wstring files = wpath + L"/*.*";
     WIN32_FIND_DATA wfd;
     HANDLE search = FindFirstFileEx(files.c_str(), FindExInfoStandard, &wfd, FindExSearchNameMatch, NULL, 0);
     bool ret = true;
@@ -94,7 +96,7 @@ bool WindowsFileSystem::removeDirectory(const FilePath& path) {
             // Need check string . and .. for delete folders and files begin name.
             std::wstring fileName = wfd.cFileName;
             if (fileName != L"." && fileName != L"..") {
-                std::wstring temp = wpath + wfd.cFileName;
+                std::wstring temp = wpath + L'/' + wfd.cFileName;
                 if (wfd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) {
                     temp += '/';
                     ret = ret && this->removeDirectory(StringWideCharToUtf8(temp));
@@ -161,22 +163,34 @@ bool WindowsFileSystem::renameFile(const FilePath& oldFilePath, const FilePath& 
 
 std::unique_ptr<IFileHandle> WindowsFileSystem::open(const FilePath& filePath, AccessFlag flag) {
     int32_t accessFlag = 0;
+    int32_t createFlag = 0;
+    int32_t shareFlag   = 0;
     if (flag == AccessFlag::READ_ONLY) {
         accessFlag = GENERIC_READ;
+        createFlag = OPEN_EXISTING;
+        shareFlag = FILE_SHARE_READ;
     } else if (flag == AccessFlag::WRITE_ONLY) {
-        accessFlag = GENERIC_WRITE | CREATE_ALWAYS | TRUNCATE_EXISTING;
+        accessFlag = GENERIC_WRITE;
+        createFlag = CREATE_ALWAYS;
+        shareFlag = FILE_SHARE_WRITE;
     } else if (flag == AccessFlag::READ_WRITE) {
         accessFlag = GENERIC_READ | GENERIC_WRITE;
+        createFlag = OPEN_ALWAYS;
+        shareFlag = FILE_SHARE_READ | FILE_SHARE_WRITE;
     } else if (flag == AccessFlag::APPEND) {
-        accessFlag = GENERIC_READ | GENERIC_WRITE | OPEN_ALWAYS;
+        createFlag = OPEN_ALWAYS;
+        accessFlag = GENERIC_READ | GENERIC_WRITE;
+        shareFlag = FILE_SHARE_READ | FILE_SHARE_WRITE;
     }
 
-    int32_t winFlags = FILE_SHARE_READ | FILE_SHARE_WRITE;
-    int32_t createFlag = OPEN_EXISTING;
-    FilePath actualPath = filePath;
-    HANDLE handle = CreateFile(StringUtf8ToWideChar(actualPath.value()).c_str(), accessFlag, winFlags, NULL, createFlag, FILE_ATTRIBUTE_NORMAL, NULL);
+    cc::FilePath actualPath = filePath;
+    HANDLE handle = CreateFile(StringUtf8ToWideChar(actualPath.value()).c_str(), accessFlag, shareFlag, NULL, createFlag, FILE_ATTRIBUTE_NORMAL, NULL);
     if (handle != INVALID_HANDLE_VALUE) {
-        return std::make_unique<WindowsFileHandle>(handle);
+        auto safeHandle = std::make_unique<WindowsFileHandle>(handle);
+        if (flag == AccessFlag::APPEND) {
+            safeHandle->seek(0, cc::IFileHandle::MoveMethod::FILE_SEEK_END);
+        }
+        return std::move(safeHandle);
     }
     return nullptr;
 }

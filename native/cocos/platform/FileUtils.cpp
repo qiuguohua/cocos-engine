@@ -55,9 +55,9 @@
 
 #if CC_PLATFORM == CC_PLATFORM_ANDROID
 #include "cocos/platform/android/ResourceFileSystem.h"
-#endif
 #include "platform/java/jni/JniHelper.h"
 #include "platform/java/jni/JniImp.h"
+#endif
 
 namespace cc {
 

@@ -76,7 +76,7 @@ LocalFileSystem* LocalFileSystem::createLocalFileSystem() {
 
 bool LocalFileSystem::createDirectory(const FilePath& path) {
     CC_UNUSED_PARAM(path);
-    return true;
+    return false;
 }
 
 bool LocalFileSystem::removeDirectory(const FilePath& path) {

@@ -1,6 +1,5 @@
-
 /****************************************************************************
- Copyright (c) 2022 Xiamen Yaji Software Co., Ltd.
+ Copyright (c) 2021 Xiamen Yaji Software Co., Ltd.
 
  http://www.cocos.com
 
@@ -24,30 +23,9 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#pragma once
+#include "cocos/platform/filesystem/FileSystem.h"
+#include "gtest/gtest.h"
 
-#include "base/Macros.h"
-
-#include <Windows.h>
-#include "cocos/platform/filesystem/IFileHandle.h"
-
-namespace cc {
-
-class CC_DLL WindowsFileHandle : public IFileHandle {
-public:
-    WindowsFileHandle(HANDLE handle);
-    ~WindowsFileHandle() override;
-
-    bool seek(int64_t pos, MoveMethod moveMethod) override;
-    int64_t tell() override;
-    int64_t size() override;
-    bool read(uint8_t* buffer, int64_t bufferSize) override;
-    bool write(uint8_t* buffer, int64_t bufferSize) override;
-    bool flush() override;
-    bool close() override;
-
-private:
-    HANDLE _handle{nullptr};
-};
-
-} // namespace cc
+TEST(FileSystemTest, CreateDirText) {
+   // cc::FileSystem f
+}

@@ -42,14 +42,15 @@ bool WindowsFileHandle::seek(int64_t pos, MoveMethod moveMethod) {
     LARGE_INTEGER filepos;
     filepos.QuadPart = pos;
     LARGE_INTEGER newPos;
+    DWORD winMoveMethod{FILE_BEGIN};
     if (moveMethod == MoveMethod::FILE_SEEK_END) {
-        _moveMethod = FILE_END;
+        winMoveMethod = FILE_END;
     } else if (moveMethod == MoveMethod::FILE_SEEK_CUR) {
-        _moveMethod = FILE_CURRENT;
+        winMoveMethod = FILE_CURRENT;
     }
 
-    if (!SetFilePointerEx(_handle, filepos, &newPos, _moveMethod)) {
-        CC_LOG_ERROR("Can't seek to %d from %d", pos, _moveMethod);
+    if (!SetFilePointerEx(_handle, filepos, &newPos, winMoveMethod)) {
+        CC_LOG_ERROR("Can't seek to %d from %d", pos, moveMethod);
         return false;
     }
     return true;
@@ -59,8 +60,7 @@ int64_t WindowsFileHandle::tell() {
     CC_ASSERT(_handle != nullptr);
     LARGE_INTEGER seek, pos;
     seek.QuadPart = 0;
-    if (!SetFilePointerEx(_handle, seek, &pos, _moveMethod)) {
-        CC_LOG_ERROR("Can't get file position from %d", _moveMethod);
+    if (!SetFilePointerEx(_handle, seek, &pos, FILE_CURRENT)) {
         return -1;
     }
     return pos.QuadPart;
@@ -69,7 +69,7 @@ int64_t WindowsFileHandle::tell() {
 bool WindowsFileHandle::read(uint8_t* buffer, int64_t bufferSize) {
     CC_ASSERT(_handle != nullptr);
     DWORD readCount = 0;
-    if (!ReadFile(_handle, buffer, bufferSize, &readCount, NULL)) {
+    if (!ReadFile(_handle, reinterpret_cast<LPVOID>(buffer), bufferSize, &readCount, NULL)) {
         CC_LOG_ERROR("Can't read, the error code is %d", GetLastError());
         return false;
     }

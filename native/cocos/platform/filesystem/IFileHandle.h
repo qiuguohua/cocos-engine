@@ -41,7 +41,7 @@ public:
     IFileHandle() = default;
     virtual ~IFileHandle() { };
 
-    virtual bool seek(int64_t pos, MoveMethod moveMethod = MoveMethod::FILE_SEEK_CUR) = 0;
+    virtual bool seek(int64_t pos, MoveMethod moveMethod = MoveMethod::FILE_SEEK_SET) = 0;
     virtual int64_t tell() = 0;
     virtual int64_t size() = 0;
     virtual bool read(uint8_t* buffer, int64_t buffersize) = 0;

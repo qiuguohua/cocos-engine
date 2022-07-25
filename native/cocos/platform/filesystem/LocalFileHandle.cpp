@@ -27,6 +27,8 @@
 #if CC_PLATFORM != CC_PLATFORM_WINDOWS
     #include <sys/stat.h>
 #else
+    #include <Windows.h>
+    #include <Shlobj.h>
     #include <sys/stat.h>
     #include <sys/types.h>
 #endif
@@ -46,11 +48,11 @@ LocalFileHandle::~LocalFileHandle() {
 
 bool LocalFileHandle::seek(int64_t pos, MoveMethod moveMethod) {
     CC_ASSERT(_fp != nullptr);
-    int moveMethodInput = SEEK_END;
+    int moveMethodInput = SEEK_SET;
     if (moveMethod == MoveMethod::FILE_SEEK_END) {
         moveMethodInput = SEEK_END;
     } else if (moveMethod == MoveMethod::FILE_SEEK_CUR) {
-        moveMethodInput = SEEK_SET;
+        moveMethodInput = SEEK_CUR;
     }
     return fseek(_fp, pos, moveMethodInput) == 0;
 }
@@ -67,9 +69,10 @@ int64_t LocalFileHandle::size() {
 #else
     auto descriptor = fileno(_fp);
 #endif
+    CC_ASSERT(descriptor > 0);
+
     struct stat statBuf;
     if (fstat(descriptor, &statBuf) == -1) {
-        fclose(_fp);
         return 0;
     }
     return statBuf.st_size;
@@ -77,14 +80,17 @@ int64_t LocalFileHandle::size() {
 
 bool LocalFileHandle::read(uint8_t* buffer, int64_t bufferSize) {
     CC_ASSERT(_fp != nullptr);
+    CC_ASSERT(bufferSize > 0);
     int64_t sz = size();
+    if (!sz) {
+        return false;
+    }
     if (sz > bufferSize) {
         sz = bufferSize;
     }
-    size_t readsize = fread(buffer, 1, static_cast<size_t>(sz), _fp);
-    fclose(_fp);
+    size_t readSize = fread(buffer, 1, static_cast<size_t>(sz), _fp);
     bool ret = true;
-    if (readsize < sz) {
+    if (readSize < sz) {
         ret = false;
     }
     return ret;
@@ -92,8 +98,7 @@ bool LocalFileHandle::read(uint8_t* buffer, int64_t bufferSize) {
 
 bool LocalFileHandle::write(uint8_t* buffer, int64_t bufferSize) {
     CC_ASSERT(_fp != nullptr);
-    size_t writeSize = fwrite(buffer, bufferSize, 1, _fp);
-    fclose(_fp);
+    size_t writeSize = fwrite(buffer, 1, bufferSize, _fp);
     bool ret = true;
     if (writeSize != bufferSize) {
         ret = false;

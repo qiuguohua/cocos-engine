@@ -174,7 +174,7 @@ FilePath FilePath::append(const ccstd::string& path) const {
         appended = path.substr(0, nulPos);
     }
 
-    if (_path == "." && !appended.empty()) {
+    if (!appended.empty() && (_path == "." || _path == "")) {
         return FilePath(appended);
     }
 
@@ -203,12 +203,12 @@ ccstd::string FilePath::normalizePath() {
     }
 
     // ./pathA/path
-    if (ret[0] == '.' && ret[1] == '/') {
+    if (ret[0] == '.' && (ret[1] == '/' || ret[1] == '\0')) {
         ret.erase(0, 2);
     }
 
-    size_t pos;
-    while ((pos = ret.rfind("..")) != ccstd::string::npos && pos > 0) {
+    int pos;
+    while ((pos = ret.find("..")) != ccstd::string::npos && pos - 2 >= 0) {
         int prevSlash = ret.rfind('/', pos - 2);
         if (prevSlash == ccstd::string::npos) {
             if (pos + 3 <= ret.length() && ret[pos + 2] == '/') {
