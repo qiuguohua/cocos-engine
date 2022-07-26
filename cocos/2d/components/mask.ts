@@ -44,7 +44,7 @@ import { Stage } from '../renderer/stencil-manager';
 import { NodeEventProcessor } from '../../core/scene-graph/node-event-processor';
 import { RenderingSubMesh } from '../../core/assets/rendering-sub-mesh';
 import { IAssemblerManager } from '../renderer/base';
-import { RenderEntity, RenderEntityType } from '../renderer/render-entity';
+import { MaskMode, RenderEntity, RenderEntityType } from '../renderer/render-entity';
 import { RenderDrawInfoType } from '../renderer/render-draw-info';
 import { Sprite } from './sprite';
 
@@ -152,9 +152,7 @@ export class Mask extends UIRenderer {
             this._changeRenderType();
             this._updateGraphics();
             if (JSB) {
-                this.subComp!.renderEntity.setIsSubMask(true);
-                // subMask and mask should have the same inverted flag
-                this.subComp!.renderEntity.setIsMaskInverted(this._inverted);
+                this.subComp!.renderEntity.setMaskMode(this._inverted ? MaskMode.MASK_NODE_INVERTED : MaskMode.MASK_NODE);
             }
         } else {
             if (this._graphics) {
@@ -164,9 +162,7 @@ export class Mask extends UIRenderer {
             this._maskNode!.parent = null;
             this._changeRenderType();
             if (JSB) {
-                this.subComp!.renderEntity.setIsSubMask(true);
-                // subMask and mask should have the same inverted flag
-                this.subComp!.renderEntity.setIsMaskInverted(this._inverted);
+                this.subComp!.renderEntity.setMaskMode(this._inverted ? MaskMode.MASK_NODE_INVERTED : MaskMode.MASK_NODE);
             }
         }
     }
@@ -194,7 +190,7 @@ export class Mask extends UIRenderer {
         }
 
         if (JSB) {
-            this._renderEntity.setIsMaskInverted(this._inverted);
+            this._renderEntity.setMaskMode(this._inverted ? MaskMode.MASK_INVERTED : MaskMode.MASK);
         }
     }
 
@@ -355,11 +351,8 @@ export class Mask extends UIRenderer {
 
         if (JSB) {
             if (this.renderData && this.subComp) {
-                this._renderEntity.setIsMask(true);
-                this.subComp.renderEntity.setIsSubMask(true);
-                this._renderEntity.setIsMaskInverted(this._inverted);
-                // subMask and mask should have the same inverted flag
-                this.subComp.renderEntity.setIsMaskInverted(this._inverted);
+                this._renderEntity.setMaskMode(this._inverted ? MaskMode.MASK_INVERTED : MaskMode.MASK);
+                this.subComp.renderEntity.setMaskMode(this._inverted ? MaskMode.MASK_NODE_INVERTED : MaskMode.MASK_NODE);
                 // hack for isMeshBuffer flag
                 this.renderData.renderDrawInfo.setIsMeshBuffer(true);
                 this.renderData.drawInfoType = RenderDrawInfoType.MODEL;
@@ -377,12 +370,6 @@ export class Mask extends UIRenderer {
         this._sizeChange();
         this._siblingChange();
         this._layerChange();
-        if (JSB) {
-            if (this._renderData && this._clearStencilMtl) {
-                const drawInfo = this._renderData.renderDrawInfo;
-                drawInfo.setMaterial(this._clearStencilMtl);
-            }
-        }
     }
 
     /**
@@ -659,6 +646,10 @@ export class Mask extends UIRenderer {
                 }
             }
         }
+    }
+
+    protected _updateBuiltinMaterial (): Material {
+        return builtinResMgr.get<Material>('default-clear-stencil');
     }
 
     protected _updateMaterial () {
