@@ -1,3 +1,28 @@
+/****************************************************************************
+ Copyright (c) 2021-2022 Xiamen Yaji Software Co., Ltd.
+
+ http://www.cocos.com
+
+ Permission is hereby granted, free of charge, to any person obtaining a copy
+ of this software and associated engine source code (the "Software"), a limited,
+ worldwide, royalty-free, non-assignable, revocable and non-exclusive license
+ to use Cocos Creator solely to develop games on your target platforms. You shall
+ not use Cocos Creator software for developing other software or tools that's
+ used for developing games. You are not granted to publish, distribute,
+ sublicense, and/or sell copies of Cocos Creator.
+
+ The software or tools in this License Agreement are licensed, not sold.
+ Xiamen Yaji Software Co., Ltd. reserves all rights not expressly granted to you.
+
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ THE SOFTWARE.
+****************************************************************************/
+
 #include "Object.h"
 #include <memory>
 #include <unordered_map>
@@ -241,7 +266,6 @@ bool Object::defineFunction(const char* funcName, napi_callback func) {
 bool Object::defineProperty(const char* name, napi_callback getter, napi_callback setter) {
     napi_status              status;
     napi_property_descriptor properties[] = {{name, nullptr, nullptr, getter, setter, 0, napi_default, 0}};
-    LOGI("get this :%p", this);
     status = napi_define_properties(_env, _objRef.getValue(_env), sizeof(properties) / sizeof(napi_property_descriptor), properties);
     if (status == napi_ok) {
         return true;
@@ -327,7 +351,6 @@ bool Object::init(napi_env env, napi_value js_object, Class* cls) {
     }
 
     napi_status status;
-    LOGI("init this :%p", this);
     return true;
 }
 
@@ -341,14 +364,11 @@ bool Object::call(const ValueArray& args, Object* thisObject, Value* rval) {
     napi_status status;
     assert(isFunction());
     napi_value thisObj = thisObject ? thisObject->_getJSObject() : nullptr;
-    LOGE("qgh object::call start %{public}p", thisObj);
     status =
         napi_call_function(_env, thisObj, _getJSObject(), argc, argv.data(), &return_val);
-    LOGE("qgh object::call end thisObj %{public}p _getJSObject  %{public}p", thisObj, _getJSObject());
     if (rval) {
         internal::jsToSeValue(return_val, rval);
     }
-    LOGE("qgh object::call finish %{public}p", return_val);
     return true;
 }
 
@@ -374,7 +394,6 @@ void Object::setPrivateData(void* data) {
 
     napi_valuetype valType;
     NODE_API_CALL(status, ScriptEngine::getEnv(), napi_typeof(ScriptEngine::getEnv(), _objRef.getValue(_env), &valType));
-    LOGI("this type is %d, native this:%p", valType, data);
 
     //issue https://github.com/nodejs/node/issues/23999
     auto tmpThis = _objRef.getValue(_env);

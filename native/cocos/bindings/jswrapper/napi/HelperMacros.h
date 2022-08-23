@@ -1,3 +1,28 @@
+/****************************************************************************
+ Copyright (c) 2021-2022 Xiamen Yaji Software Co., Ltd.
+
+ http://www.cocos.com
+
+ Permission is hereby granted, free of charge, to any person obtaining a copy
+ of this software and associated engine source code (the "Software"), a limited,
+ worldwide, royalty-free, non-assignable, revocable and non-exclusive license
+ to use Cocos Creator solely to develop games on your target platforms. You shall
+ not use Cocos Creator software for developing other software or tools that's
+ used for developing games. You are not granted to publish, distribute,
+ sublicense, and/or sell copies of Cocos Creator.
+
+ The software or tools in this License Agreement are licensed, not sold.
+ Xiamen Yaji Software Co., Ltd. reserves all rights not expressly granted to you.
+
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ THE SOFTWARE.
+****************************************************************************/
+
 #pragma once
 
 #include "CommonHeader.h"
@@ -35,7 +60,6 @@ constexpr inline T *SE_THIS_OBJECT(STATE &s) { // NOLINT(readability-identifier-
 
 #define SE_BIND_PROP_GET(funcName)                                                                    \
     napi_value funcName##Registry(napi_env env, napi_callback_info info) {                            \
-        LOGD("SE_BIND_PROP_GET get %s", #funcName);                                                   \
         napi_value  _this;                                                                            \
         napi_status status;                                                                           \
         NODE_API_CALL(status, env,                                                                    \
@@ -43,7 +67,6 @@ constexpr inline T *SE_THIS_OBJECT(STATE &s) { // NOLINT(readability-identifier-
         void *obj;                                                                                    \
         napi_unwrap(env, _this, reinterpret_cast<void **>(&obj));                                     \
         se::State state(obj);                                                                         \
-        LOGD("unwrap ptr :%p", obj);                                                                  \
         bool ret = funcName(state);                                                                   \
         if (!ret) {                                                                                   \
             SE_LOGE("[ERROR] Failed to invoke %s, location: %s:%d\n", #funcName, __FILE__, __LINE__); \
@@ -56,7 +79,6 @@ constexpr inline T *SE_THIS_OBJECT(STATE &s) { // NOLINT(readability-identifier-
 
 #define SE_BIND_PROP_SET(funcName)                                                                    \
     napi_value funcName##Registry(napi_env env, napi_callback_info info) {                            \
-        LOGD("SE_BIND_PROP_SET set %s", #funcName);                                                   \
         napi_status status;                                                                           \
         size_t      argc = 1;                                                                         \
         napi_value  args[1];                                                                          \
@@ -83,7 +105,6 @@ constexpr inline T *SE_THIS_OBJECT(STATE &s) { // NOLINT(readability-identifier-
 #define SE_BIND_FUNC(funcName)                                                                          \
     napi_value funcName##Registry(                                                                      \
         napi_env env, napi_callback_info info) {                                                        \
-        LOGD("%s", #funcName);                                                                          \
         napi_status    status;                                                                          \
         bool           ret = false;                                                                     \
         napi_value     _this;                                                                           \
@@ -145,7 +166,6 @@ constexpr inline T *SE_THIS_OBJECT(STATE &s) { // NOLINT(readability-identifier-
 #define SE_BIND_FINALIZE_FUNC(funcName)                                                               \
     void funcName##Registry(                                                                          \
         napi_env env, void *nativeObject, void *hint /*finalize_hint*/) {                             \
-        LOGD("%s %p hint:%p", #funcName, nativeObject, hint);                                         \
         if (nativeObject == nullptr) {                                                                \
             return;                                                                                   \
         }                                                                                             \
