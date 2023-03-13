@@ -144,7 +144,9 @@ int32_t Engine::init() {
 
 void Engine::destroy() {
     cc::DeferredReleasePool::clear();
+#if (CC_PLATFORM != CC_PLATFORM_OPENHARMONY) // TODO(qgh):May be removed later
     cc::network::HttpClient::destroyInstance();
+#endif
     _scheduler->removeAllFunctionsToBePerformedInCocosThread();
     _scheduler->unscheduleAll();
     CCObject::deferredDestroy();
@@ -234,6 +236,9 @@ void Engine::close() { // NOLINT
     // #if CC_USE_SOCKET
     //     cc::network::WebSocket::closeAllConnections();
     // #endif
+#if (CC_PLATFORM != CC_PLATFORM_OPENHARMONY) // TODO(qgh):May be removed later
+    cc::network::HttpClient::destroyInstance();
+#endif
 
     cc::DeferredReleasePool::clear();
     _scheduler->removeAllFunctionsToBePerformedInCocosThread();
@@ -272,7 +277,7 @@ void Engine::tick() {
 
         // iOS/macOS use its own fps limitation algorithm.
         // Windows for Editor should not sleep,because Editor call tick function synchronously
-#if (CC_PLATFORM == CC_PLATFORM_ANDROID || (CC_PLATFORM == CC_PLATFORM_WINDOWS && !CC_EDITOR) || CC_PLATFORM == CC_PLATFORM_OHOS) || (defined(CC_SERVER_MODE) && (CC_PLATFORM == CC_PLATFORM_MAC_OSX))
+#if (CC_PLATFORM == CC_PLATFORM_ANDROID || (CC_PLATFORM == CC_PLATFORM_WINDOWS && !CC_EDITOR) || CC_PLATFORM == CC_PLATFORM_OHOS || CC_PLATFORM == CC_PLATFORM_OPENHARMONY) || (defined(CC_SERVER_MODE) && (CC_PLATFORM == CC_PLATFORM_MAC_OSX))
         if (dtNS < static_cast<double>(_prefererredNanosecondsPerFrame)) {
             CC_PROFILE(EngineSleep);
             std::this_thread::sleep_for(

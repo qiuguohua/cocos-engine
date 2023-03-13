@@ -53,6 +53,10 @@ class ScreenAdapter extends EventTarget {
 
     public get windowSize (): Size {
         const dpr = this.devicePixelRatio;
+        // @ts-expect-error interface for OH only
+        const width = globalThis.oh ? jsb.device.getInnerWidth() : window.innerWidth;
+        // @ts-expect-error interface for OH only
+        const height = globalThis.oh ? jsb.device.getInnerHeight() : window.innerHeight;
         // NOTE: fix precision issue on Metal render end.
         const roundWidth = Math.round(jsb.window.innerWidth);
         const roundHeight = Math.round(jsb.window.innerHeight);

@@ -115,6 +115,7 @@ function createTimeoutInfo (prevFuncArgs, isRepeat) {
     return info.id;
 }
 
+if(!window.oh) {
 jsbWindow.setTimeout = function (cb) {
     return createTimeoutInfo(arguments, false);
 };
@@ -128,7 +129,9 @@ jsbWindow.setInterval = function (cb) {
 };
 
 jsbWindow.clearInterval = jsbWindow.clearTimeout;
+}
 jsbWindow.alert = console.error.bind(console);
+
 
 // File utils (Temporary, won't be accessible)
 if (typeof jsb.FileUtils !== 'undefined') {
