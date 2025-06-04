@@ -1,6 +1,11 @@
 name: <Native> Compile
 
 on:
+  push:
+    branches:
+      - main
+      - dev
+      - "**"   # 监听所有分支推送
   pull_request:
     paths:
     - 'templates/**'
