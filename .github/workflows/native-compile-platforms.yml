@@ -354,7 +354,7 @@ jobs:
             7z x commandline-tools-linux-x64-5.0.13.200.zip.001 -o$HOME/openharmony > /dev/null
             cd $HOME/openharmony
             ls -l
-            cd commandline-tools
+            cd command-line-tools
             ls -l
           fi
 
