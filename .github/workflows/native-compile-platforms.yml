@@ -418,6 +418,9 @@ jobs:
           # echo "{\"hvigorVersion\":\"3.0.2\",\"dependencies\":{\"@ohos/hvigor-ohos-plugin\":\"3.0.2\"}}" > ./hvigor/hvigor-config.json5
           cat ./hvigor/hvigor-config.json5
 
+          echo "~~~~~~~~~~~~~~~~~~~~~~~~~build-profile.json5: "
+          cat ./build-profile.json5
+
           echo "=============== Do not import game.ts for cocos_worker.ets ==============="
           sed -i '/<% if(!useV8) { %>/,/<% } %>/d' ./entry/src/main/ets/workers/cocos_worker.ets
           sed -i '/<% if(useV8) { %>/,/<% } %>/d' ./entry/src/main/ets/workers/cocos_worker.ets
