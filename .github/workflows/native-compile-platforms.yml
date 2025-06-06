@@ -375,6 +375,8 @@ jobs:
           echo "PATH=$PATH"
           echo "hvigorw path:"
           which hvigorw
+          echo "ohpm path:"
+          which ohpm
 
           NATIVE_ROOT=$GITHUB_WORKSPACE/native
           echo "Compiling Openharmony ... "
@@ -430,6 +432,7 @@ jobs:
           cat ./entry/src/main/ets/cocos/oh-adapter/sys-ability-polyfill.ets
 
           echo "=============== EXECUTE hvigorw ==============="
+          ohpm install
           hvigorw clean -i
           hvigorw --stop-daemon -i
           hvigorw --mode module -p product=default assembleHap --parallel --incremental debuggable=true --no-daemon -d
